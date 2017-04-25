@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
 
     parse("liste.txt", "listout.txt", "listoutex.txt", "listoutexacte.txt", "listouteex.txt");
 
-    printf("La list a été parsée :D \n");
+    printf("La liste a été parsée :D \n");
 
     bzero((char*)&serv_addr, sizeof(serv_addr));
     bzero((char*)&cli_addr, sizeof(cli_addr));
@@ -50,6 +50,13 @@ int main(int argc, char* argv[]){
 
         //printf("%s \n", (buffer));
         sscanf(buffer, "%s %s %s", t1, t2, t3);
+       	//printf("%s\n", t2);
+       /*if (isFiltered(t2, "listout.txt", "listoutex.txt", "listoutexacte.txt", "listouteex.txt")){
+        	printf("%s is Filtered !", t2);
+        	bzero((char*) buffer, 500);
+        	send(newsockfd, buffer, n, 0);
+        	exit(0);
+        }*/
         /*printf("%s \n", t1);
         printf("%s \n", t2);
         printf("%s \n", t3);*/
@@ -78,7 +85,7 @@ int main(int argc, char* argv[]){
             }
 
             sprintf(t2, "%s", temp);
-            printf("host = %s \n", t2);
+            //printf("host = %s \n", t2);
             host = gethostbyname(t2);
             //printf("Couocu\n");
 
@@ -90,12 +97,12 @@ int main(int argc, char* argv[]){
             strcat(t1, "^]");
             temp = strtok(t1, "//");
             temp = strtok(NULL, "/");
-            printf("%s\n", temp);
+            //printf("%s\n", temp);
             if (temp!=NULL){
                 temp = strtok(NULL, "^]");
             }
             //printf("temp\n");
-            printf("%spath = %s %sPort = %d%s \n", CRLF, temp, CRLF, port, CRLF);
+           //printf("%spath = %s %sPort = %d%s \n", CRLF, temp, CRLF, port, CRLF);
             
 
             bzero((char*) &host_addr, sizeof(host_addr));
@@ -124,21 +131,21 @@ int main(int argc, char* argv[]){
             }
 
             n = send(sockfd1, buffer, strlen(buffer), 0);
-            printf("TOLO %s \n ", buffer);
-            printf("%d\n",n);
+           //printf("TOLO %s \n ", buffer);
+            //printf("%d\n",n);
             if (n < 0){
                 showError("send()");
             }
             else{
                 do{
-                    printf("Coucou1?\n");
+                    //printf("Coucou1?\n");
                     bzero((char*) buffer, 500);
                     n=recv(sockfd1, buffer, 500, 0);
-                    printf("Buffer dans while : %s\n", buffer);
+                    //printf("Buffer dans while : %s\n", buffer);
                     if (!(n<=0)){
                         send(newsockfd, buffer, n, 0);
                     }
-                    printf("%d\n",n);
+                    //printf("%d\n",n);
                 }
                 while (n>0);
                 }

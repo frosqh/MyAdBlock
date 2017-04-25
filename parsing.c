@@ -74,7 +74,12 @@ int parse(char *ENTREE, char *SORTIE, char *SORTIEEX, char *SORTIEEXACTE, char *
     			}
     			else{
     				if (c == '$'){
-    					bzero((char*) temp, 500000);
+                        if (strlen(temp)>5){
+    					   ig = 1;
+                        }
+                        else{
+                            bzero((char*) temp, 500000);
+                        }
     					goto normal;
     				}
     				else{
@@ -156,4 +161,52 @@ int parse(char *ENTREE, char *SORTIE, char *SORTIEEX, char *SORTIEEXACTE, char *
     fclose(f_outex);
     fclose(f_outexacte);
     return(0);
+}
+
+int isFiltered(char * url, char *SORTIE, char *SORTIEEX, char *SORTIEEXACTE, char *SORTIEEEX){
+    FILE *f_in;
+    int c;
+    int i = 0;
+    char temp[300];
+    bzero((char *)temp, 300);
+    if ((f_in = fopen(SORTIEEXACTE, "r")) == NULL){
+        fprintf(stderr, "\nErreur : Impossible de le lire le fichier %s \n", SORTIEEXACTE);
+        exit(EXIT_FAILURE);
+    }
+
+    while ((c = fgetc(f_in)) != EOF){
+        //printf("%c", c);
+        temp[strlen(temp)]=c;
+        if (c=='\n'){
+            //printf("Url : %s vs Temp : %s \n",url, temp);
+            ///sleep(2);
+            for (i=7; i < strlen(url); i++){
+                //printf("%c vs %c\n", temp[i-7], url[i]);
+               // sleep(0.5);
+                if (temp[i-7]!=url[i]){
+                    bzero((char *)temp, 300);
+                    i = strlen(url)+85;
+                }
+            }
+            if (i == strlen(url)){;
+                return 1;
+            }
+            bzero((char *)temp, 300);
+
+        }
+    }
+
+    return 0;
+
+}
+
+
+char * subString(const char* input, int offset, int len, char* dest){
+    int input_len = strlen(input);
+    if (offset + len>input_len){
+        return NULL;
+    }
+
+    strncpy (dest, input+offset, len);
+    return dest;
 }
